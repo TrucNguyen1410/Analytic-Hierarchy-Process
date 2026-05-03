@@ -8,7 +8,8 @@ from run import app
 from app.extensions import db
 from app.services.import_service import stage_laptop_file, commit_staging
 
-file_path = r"e:\NguyenQuocKhanh\DAMH\Shop_laptop\T2CA1\laptop_be\Train AI\AHP_Laptop_Nhom8.xlsx"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "Train AI", "AHP_Laptop_Nhom8.xlsx")
 
 if not os.path.exists(file_path):
     print(f"Error: File not found: {file_path}")

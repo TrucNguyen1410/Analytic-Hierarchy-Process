@@ -12,7 +12,9 @@ if not db_url:
 # Xóa +psycopg trong chuỗi URL nếu có để dùng trực tiếp psycopg3
 db_url_connect = db_url.replace("postgresql+psycopg://", "postgresql://")
 
-sql_file_path = r"e:\NguyenQuocKhanh\DAMH\Shop_laptop\T2CA1\DB.sql"
+# Lấy đường dẫn tuyệt đối dựa trên vị trí file hiện tại
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sql_file_path = os.path.join(base_dir, "DB.sql")
 
 print(f"Connecting to {db_url_connect}...")
 import psycopg
