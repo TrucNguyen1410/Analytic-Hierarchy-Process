@@ -39,7 +39,7 @@
 ## 🚀 Live Demo (Đang Hoạt Động)
 
 Hệ thống hoàn chỉnh hiện đang được đưa lên nền tảng Cloud:
-- **Frontend (Giao diện người dùng):** 🔗 *(Chèn link Vercel của bạn vào đây, vd: https://analytic-hierarchy-process.vercel.app)*
+- **Frontend (Giao diện người dùng):** 🔗 [https://analytic-hierarchy-process-one.vercel.app/](https://analytic-hierarchy-process-one.vercel.app/)
 - **Backend (API Endpoint):** 🔗 [https://laptop-db.onrender.com](https://laptop-db.onrender.com)
 
 ## 💻 Hướng Dẫn Cài Đặt (Chạy Local)
