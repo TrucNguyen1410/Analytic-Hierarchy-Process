@@ -1,43 +1,46 @@
-Đặt tên Database là :"T2C1" hoặc tên khác thì phải sửa lại trong file ".env" 
-và đổi mật khẩu của postgre lại
-Cách chạy chương trình:
+# HƯỚNG DẪN CHẠY DỰ ÁN SHOP LAPTOP AHP-AI 
 
-Bước 1: Cài môi trường
-Vào terminal của thư mục laptop_be : đường dẫn là D:\DAGK\AHP\T2CA1\laptop_be>
-sau đó chạy lệnh python -m venv .env
-Tải thư viện chạy lệnh: pip install -r requirements.txt
+## 1. Cấu trúc thư mục
+- `laptop_be`: Thư mục Backend (Flask Python)
+- `laptop-frontend`: Thư mục Frontend (React Vite)
+- `DB.sql`: File cấu trúc Database PostgreSQL (nằm ở thư mục gốc)
 
-Bước 2: python run.py 
-sau đó dùng postman để import dataset vào cơ sở dữ liệu: 
-Post: http://127.0.0.1:5000/api/admin/imports/laptop-data
+## 2. Cài đặt Backend (laptop_be)
+1. Mở terminal tại thư mục `laptop_be`.
+2. Tạo môi trường ảo: `python -m venv .venv` (Lưu ý: đặt tên là .venv, KHÔNG đặt là .env)
+3. Kích hoạt môi trường ảo:
+   - Windows: `.venv\Scripts\activate`
+   - Mac/Linux: `source .venv/bin/activate`
+4. Cài đặt thư viện: `pip install -r requirements.txt`
+5. Cài bổ sung thư viện bắt buộc: `pip install flask-cors requests`
+6. Cấu hình file `.env`: 
+   - Mở file `.env` sửa User/Password/Port theo máy của bạn.
+   - Database name: `T2C1` (Lưu ý: Không được có dấu cách ở cuối tên).
 
-Vào tab Body → chọn form-data
-Tạo các field:
-file → kiểu File → chọn file AHP_Laptop_Nhom8.xlsx
-sheetName → Laptop_Data
-replaceStaging → true
-autoCommit → false
+## 3. Cấu hình Database (PostgreSQL)
+1. Mở pgAdmin 4, tạo database tên là: `T2C1`
+2. Chuột phải vào db `T2C1` -> chọn `Query Tool`.
+3. Mở file `DB.sql` (ở thư mục gốc dự án), copy toàn bộ nội dung dán vào Query Tool.
+4. Nhấn nút Play (F5) để khởi tạo các bảng.
 
-Post: http://127.0.0.1:5000/api/admin/imports/laptop-data/commit
-không có body nhấn send là được 
-nếu bị lỗi thì thử dán đoạn code sau vào Postgre rồi chạy lại 
+## 4. Cách nạp dữ liệu từ Excel (Giai đoạn quan trọng)
+1. Chạy Backend: `python run.py` (Phải giữ terminal này chạy liên tục).
+2. Dùng Postman gửi request POST tới: `http://127.0.0.1:5000/api/admin/imports/laptop-data`
+3. Cấu hình Postman:
+   - Tab **Authorization**: Chọn `No Auth` (vì mình sẽ gửi Token ở Header).
+   - Tab **Headers**: Thêm Key: `Authorization`, Value: `Bearer <Token_Admin>`
+   - Tab **Body**: Chọn `form-data`, thêm các Key sau:
+     + `file`: Chọn file Excel (AHP_Laptop_Nhom8.xlsx)
+     + `sheetName`: `Laptop_Data`
+     + `replaceStaging`: `true`
+     + `autoCommit`: `true`
+4. Tài khoản Admin mặc định: `admin@gmail.com` / `admin123`.
 
-WITH ranked AS (
-    SELECT
-        id,
-        ROW_NUMBER() OVER (
-            PARTITION BY
-                COALESCE(NULLIF(TRIM(laptop_name), ''), 'Unknown Laptop'),
-                COALESCE(NULLIF(TRIM(model_code), ''), '')
-            ORDER BY id
-        ) AS rn
-    FROM stg_laptop_data
-)
-DELETE FROM stg_laptop_data s
-USING ranked r
-WHERE s.id = r.id
-  AND r.rn > 1;
+## 5. Cài đặt Frontend (laptop-frontend)
+1. Mở một terminal mới tại thư mục `laptop-frontend`.
+2. Cài đặt thư viện: `npm install`
+3. Chạy dự án: `npm run dev`
+4. Mở trình duyệt truy cập: `http://localhost:5173`
 
-
-Cái thư mục Train AI t đưa vào trong thư mục laptop_be rồi nên cái con Trúc nó nằm riêng 
-ở ngoài không cần thiết nữa 
+---
+Lưu ý: Nếu gặp lỗi "Không tìm thấy candidate", hãy kiểm tra lại bảng `brands` và giá tiền trong Database (đảm bảo giá đã quy đổi sang VNĐ).

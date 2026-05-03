@@ -6,8 +6,8 @@ from .extensions import db
 from .routes.api import api_bp
 
 def create_app():
-    # Nạp biến môi trường từ file .env
-    load_dotenv()
+    # Nạp biến môi trường từ file .env (Ghi đè để tránh lỗi cache dấu cách)
+    load_dotenv(override=True)
 
     app = Flask(__name__)
     
